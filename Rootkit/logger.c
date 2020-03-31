@@ -10,7 +10,7 @@ struct file * driver_file_open(const char *path, int flags, int mode)
 	mm_segment_t    oldfs;
 	oldfs   = get_fs();
 	set_fs(get_ds());
-	filp = filp_open(path, O_CREAT|O_RDWR, S_IRWXU|S_IRWXG|S_IRWXO);
+	filp = filp_open(path, O_CREAT|O_RDWR, 0);
 	set_fs(oldfs);
 	return (filp);
 }
