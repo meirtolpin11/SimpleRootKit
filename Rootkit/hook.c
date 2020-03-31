@@ -29,8 +29,6 @@ void hijack_start ( void *target, void *new, unsigned char** o_code)
     memcpy(n_code, "\x48\xb8\x00\x00\x00\x00\x00\x00\x00\x00\xff\xe0", HIJACK_SIZE);
     *(unsigned long *)&n_code[2] = (unsigned long)new;
 
-    printk("Hooking function 0x%p with 0x%p\n", target, new);
-
     memcpy(*o_code, target, HIJACK_SIZE);
 
     // disable_write_protection();
@@ -39,7 +37,6 @@ void hijack_start ( void *target, void *new, unsigned char** o_code)
     write_cr0(read_cr0() | 0x10000);
     // enable_write_protection();
 
-    printk("Old core pointer address - %p \n", *o_code);
 }
 
 void hijack_stop(void *target, unsigned char* o_code){

