@@ -6,9 +6,9 @@ Just one cool kernel rootkit which can do some "Cyber" things on your Linux comp
 
 
 ## Supported Features - 
-* hidding from lsmod
-* hiding files from ls
-* hiding sockets from netstat
+* hidding from `lsmod`
+* hiding files from `ls`
+* hiding sockets from `netstat`
 * root privileges escalation
 * a basic keylogger (not finished)
 
